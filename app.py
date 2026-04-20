@@ -329,7 +329,7 @@ elif page == "⏱️Temporal Analysis":
     values="crime_count",   # or just use size if no column
     index="hour",
     columns="month",
-    aggfunc="count"
+    aggfunc="size"
 )
 
         fig = px.imshow(
@@ -350,10 +350,11 @@ elif page == "⏱️Temporal Analysis":
         st.caption("Darker colors indicate lower crime, brighter colors show peak crime intensity across hours and months.")
 
         max_val = pivot.max().max()
-        st.success(f"🚨 Peak crime intensity observed around Hour {pivot.stack().idxmax()[0]} in Month {pivot.stack().idxmax()[1]}")
-        color_continuous_scale="Inferno"
-
         
+        st.success(f"🚨 Peak crime intensity observed around Hour {pivot.stack().idxmax()[0]} in Month {pivot.stack().idxmax()[1]}")
+        
+
+
     # =====================================================
     # 📈 TAB 3 — INSIGHTS + STRATEGY
     # =====================================================
