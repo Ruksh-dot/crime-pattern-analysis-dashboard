@@ -323,35 +323,34 @@ elif page == "⏱️Temporal Analysis":
     # 🔥 TAB 2 — HEATMAP
     # =====================================================
     with tab2:
-        st.subheader("Crime Intensity Heatmap")
+        st.subheader("🔥 Crime Intensity Heatmap")
 
         pivot = df_temp.pivot_table(
-    values="crime_count",   # or just use size if no column
-    index="hour",
-    columns="month",
-    aggfunc="size"
-)
+        index="hour",
+        columns="month",
+        aggfunc="size"
+    )
 
         fig = px.imshow(
-    pivot,
-    labels=dict(x="Month", y="Hour", color="Crime Intensity"),
-    aspect="auto",
-    color_continuous_scale="YlOrRd"   # 🔥 heat colors
-)
+        pivot,
+        labels=dict(x="Month", y="Hour", color="Crime Intensity"),
+        aspect="auto",
+        color_continuous_scale="Inferno"
+    )
 
         fig.update_layout(
-    title="🔥 Crime Intensity Heatmap (Hour vs Month)",
-    xaxis_title="Month",
-    yaxis_title="Hour"
-)
+        title="🔥 Crime Intensity Heatmap (Hour vs Month)",
+        xaxis_title="Month",
+        yaxis_title="Hour"
+    )
 
         st.plotly_chart(fig, use_container_width=True)
 
-        st.caption("Darker colors indicate lower crime, brighter colors show peak crime intensity across hours and months.")
+        st.caption("Brighter colors indicate higher crime intensity across hours and months.")
 
-        max_val = pivot.max().max()
-        
-        st.success(f"🚨 Peak crime intensity observed around Hour {pivot.stack().idxmax()[0]} in Month {pivot.stack().idxmax()[1]}")
+        peak_hour, peak_month = pivot.stack().idxmax()
+
+        st.success(f"🚨 Peak crime intensity observed at Hour {peak_hour} in Month {peak_month}")
         
 
 
