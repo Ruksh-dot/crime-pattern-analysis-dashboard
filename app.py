@@ -263,18 +263,19 @@ elif page == "⏱️Temporal Analysis":
     st.title("⏱️ Temporal Crime Analysis Dashboard")
 
     # Load dataset
-    df_temp = pd.read_csv("temporal_clusters.csv")
+    # Load temporal dataset (cloud-safe)
+    @st.cache_data
+    def load_temporal_data():
+        url = "https://drive.google.com/uc?id=1pf0e01Q0Xp7mzZIGQnhjkdLb23gcAJRt"
+        return pd.read_csv(url)
 
-    try:
-        df_temp = pd.read_csv("temporal_clusters.csv")
-    except:
-        df_temp = pd.read_csv("https://drive.google.com/uc?id=1pf0e01Q0Xp7mzZIGQnhjkdLb23gcAJRt")
+    df_temp = load_temporal_data()
 
     # ===============================
     # 🎯 KPI CARDS (TOP SUMMARY)
     # ===============================
-    peak_hour = df_temp["hour"].value_counts().idxmax()
-    peak_month = df_temp["month"].value_counts().idxmax()
+    peak_hour = df_temp["hour"].value_counts().idxmax() if "hour" in df_temp.columns else "N/A"
+    peak_month = df_temp["month"].value_counts().idxmax() if "month" in df_temp.columns else "N/A"
 
     top_district = df_temp["district"].value_counts().idxmax() if "district" in df_temp.columns else "N/A"
     top_beat = df_temp["beat"].value_counts().idxmax() if "beat" in df_temp.columns else "N/A"
