@@ -325,12 +325,35 @@ elif page == "⏱️Temporal Analysis":
     with tab2:
         st.subheader("Crime Intensity Heatmap")
 
-        if "hour" in df_temp.columns and "month" in df_temp.columns:
-            heatmap_data = pd.crosstab(df_temp["hour"], df_temp["month"])
-            st.dataframe(heatmap_data)
+        pivot = df_temp.pivot_table(
+    values="crime_count",   # or just use size if no column
+    index="hour",
+    columns="month",
+    aggfunc="count"
+)
 
-            st.info("Darker / higher values indicate peak crime combinations")
+        fig = px.imshow(
+    pivot,
+    labels=dict(x="Month", y="Hour", color="Crime Intensity"),
+    aspect="auto",
+    color_continuous_scale="YlOrRd"   # 🔥 heat colors
+)
 
+        fig.update_layout(
+    title="🔥 Crime Intensity Heatmap (Hour vs Month)",
+    xaxis_title="Month",
+    yaxis_title="Hour"
+)
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.caption("Darker colors indicate lower crime, brighter colors show peak crime intensity across hours and months.")
+
+        max_val = pivot.max().max()
+        st.success(f"🚨 Peak crime intensity observed around Hour {pivot.stack().idxmax()[0]} in Month {pivot.stack().idxmax()[1]}")
+        color_continuous_scale="Inferno"
+
+        
     # =====================================================
     # 📈 TAB 3 — INSIGHTS + STRATEGY
     # =====================================================
